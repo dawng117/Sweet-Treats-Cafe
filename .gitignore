@@ -1,0 +1,8 @@
+# Environment variables
+.env
+server/.env
+
+# Seed data files
+server/seed.js
+server/seedOrders.js
+server/seedUsers.js

@@ -1,0 +1,7 @@
+# File môi trường
+.env
+
+# File data
+seed.js
+seedOrders.js
+seedUsers.js
