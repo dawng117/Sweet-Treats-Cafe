@@ -31,6 +31,10 @@ app.use('/api/auth', authRoutes);
 const orderRoutes = require('./routes/orders');
 app.use('/api/orders', orderRoutes);
 
+// Thêm route blogs
+const blogRoutes = require('./routes/blog');
+app.use('/api/blogs', blogRoutes);
+
 // Routes (sẽ thêm sau)
 app.get('/', (req, res) => res.send('Sweet Treats Café API'));
 

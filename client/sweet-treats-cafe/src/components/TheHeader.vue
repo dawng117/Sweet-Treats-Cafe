@@ -104,6 +104,10 @@ const handleImageError = (event) => {
             Liên hệ
             <span class="nav-link-underline"></span>
           </RouterLink>
+          <RouterLink to="/blog" class="nav-link relative">
+            Blog
+            <span class="nav-link-underline"></span>
+          </RouterLink>
           <RouterLink to="/cart" class="nav-link relative">
             <div class="flex items-center">
               <span>Giỏ hàng</span>

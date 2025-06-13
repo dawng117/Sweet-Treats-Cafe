@@ -100,6 +100,35 @@ const router = createRouter({
     {
       path: '/:pathMatch(.*)*',
       redirect: '/access-denied'
+    },
+    {
+      path: '/blog',
+      name: 'blog',
+      component: () => import('../views/BlogList.vue')
+    },
+    {
+      path: '/blog/:id',
+      name: 'blog-detail',
+      component: () => import('../views/BlogDetail.vue')
+    },
+    // Thêm routes cho quản lý blog
+    {
+      path: '/admin/blogs',
+      name: 'admin-blogs',
+      component: () => import('../components/AdminBlogList.vue'),
+      meta: { requiresAuth: true, requiresAdmin: true }
+    },
+    {
+      path: '/admin/blogs/create',
+      name: 'admin-blog-create',
+      component: () => import('../components/AdminBlogForm.vue'),
+      meta: { requiresAuth: true, requiresAdmin: true }
+    },
+    {
+      path: '/admin/blogs/edit/:id',
+      name: 'admin-blog-edit',
+      component: () => import('../components/AdminBlogForm.vue'),
+      meta: { requiresAuth: true, requiresAdmin: true }
     }
   ]
 })
