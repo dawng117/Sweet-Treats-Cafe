@@ -151,7 +151,7 @@ export default {
     const productStore = useProductStore()
     const authStore = useAuthStore()
     const router = useRouter() // Khởi tạo router
-    const activeTab = ref('products')
+    const activeTab = ref(router.currentRoute.value.query.tab || 'products')
     const orders = ref([])
     const isLoading = ref(false)
     

@@ -20,7 +20,7 @@
           </svg>
           <svg v-else class="animate-spin h-5 w-5 mr-1 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 01-8-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
           </svg>
           {{ isLoading ? 'Đang tải...' : 'Làm mới' }}
         </button>
@@ -32,13 +32,13 @@
       
       <!-- Filter controls -->
       <div class="px-6 py-4 border-b border-gray-200 bg-gray-50">
-        <div class="flex flex-wrap items-center gap-4">
-          <div class="flex items-center">
+        <div class="flex flex-col sm:flex-row flex-wrap items-center gap-4">
+          <div class="flex items-center w-full sm:w-auto">
             <label for="status-filter" class="block text-sm font-medium text-gray-700 mr-2">Trạng thái:</label>
             <select 
               id="status-filter" 
               v-model="statusFilter" 
-              class="rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm"
+              class="rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm w-full sm:w-auto"
             >
               <option value="all">Tất cả</option>
               <option value="pending">Chờ xác nhận</option>
@@ -48,12 +48,12 @@
             </select>
           </div>
           
-          <div class="flex items-center">
+          <div class="flex items-center w-full sm:w-auto">
             <label for="date-filter" class="block text-sm font-medium text-gray-700 mr-2">Thời gian:</label>
             <select 
               id="date-filter" 
               v-model="dateFilter" 
-              class="rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm"
+              class="rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm w-full sm:w-auto"
             >
               <option value="all">Tất cả</option>
               <option value="today">Hôm nay</option>
@@ -64,7 +64,7 @@
           
           <div class="flex-grow"></div>
           
-          <div class="relative">
+          <div class="relative w-full sm:w-auto">
             <input 
               type="text" 
               v-model="searchQuery" 
@@ -80,8 +80,83 @@
         </div>
       </div>
       
-      <!-- Orders table -->
-      <div class="overflow-x-auto">
+      <!-- Danh sách thẻ trên di động -->
+      <div v-if="filteredOrders.length === 0 && !isLoading" class="sm:hidden p-4 text-center text-sm text-gray-500">
+        Không tìm thấy đơn hàng nào.
+      </div>
+      <div v-else-if="isLoading && orders.length === 0" class="sm:hidden p-4 text-center text-sm text-gray-500">
+        <div class="flex justify-center">
+          <svg class="animate-spin h-5 w-5 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+          <span class="ml-2">Đang tải đơn hàng...</span>
+        </div>
+      </div>
+      <div v-else class="sm:hidden px-4 py-4 space-y-4">
+        <div v-for="order in filteredOrders" :key="order._id" class="border rounded-lg p-4 bg-white shadow-sm">
+          <div class="text-sm font-medium text-gray-900 mb-2">
+            Mã đơn: {{ order._id.substring(0, 8) }}...
+          </div>
+          <div class="text-xs text-gray-500 mb-2">
+            {{ order.paymentMethod === 'COD' ? 'Thanh toán khi nhận hàng' : 'MoMo' }}
+          </div>
+          <div class="text-sm text-gray-900 mb-2">
+            Khách hàng: {{ order.userId.username }}
+          </div>
+          <div class="text-xs text-gray-500 mb-2">
+            SĐT: {{ order.phone }}
+          </div>
+          <div class="text-xs text-gray-500 mb-2">
+            Ngày đặt: {{ formatDate(order.createdAt) }}
+          </div>
+          <div class="text-sm text-gray-500 mb-2">
+            Tổng tiền: {{ formatPrice(order.total) }} VND
+          </div>
+          <div class="mb-3">
+            <span 
+              class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full"
+              :class="{
+                'bg-yellow-100 text-yellow-800': order.status === 'pending',
+                'bg-blue-100 text-blue-800': order.status === 'processing',
+                'bg-green-100 text-green-800': order.status === 'delivered',
+                'bg-red-100 text-red-800': order.status === 'cancelled'
+              }"
+            >
+              {{ translateStatus(order.status) }}
+            </span>
+          </div>
+          <div class="flex flex-wrap gap-2">
+            <button 
+              @click="viewOrderDetails(order)" 
+              class="text-indigo-600 hover:text-indigo-900 text-xs transition-colors duration-200"
+            >
+              Chi tiết
+            </button>
+            <button 
+              @click="openStatusUpdateModal(order)" 
+              class="text-green-600 hover:text-green-900 text-xs transition-colors duration-200"
+            >
+              Cập nhật
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Orders table trên màn hình lớn -->
+      <div v-if="filteredOrders.length === 0 && !isLoading" class="hidden sm:block px-6 py-4 text-center text-sm text-gray-500">
+        Không tìm thấy đơn hàng nào.
+      </div>
+      <div v-else-if="isLoading && orders.length === 0" class="hidden sm:block px-6 py-4 text-center text-sm text-gray-500">
+        <div class="flex justify-center">
+          <svg class="animate-spin h-5 w-5 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+          <span class="ml-2">Đang tải đơn hàng...</span>
+        </div>
+      </div>
+      <div v-else class="hidden sm:block overflow-x-auto">
         <table class="min-w-full divide-y divide-gray-200">
           <thead class="bg-gray-50">
             <tr>
@@ -131,22 +206,6 @@
                 </button>
               </td>
             </tr>
-            <tr v-if="filteredOrders.length === 0 && !isLoading">
-              <td colspan="6" class="px-6 py-4 text-center text-sm text-gray-500">
-                Không tìm thấy đơn hàng nào.
-              </td>
-            </tr>
-            <tr v-if="isLoading && orders.length === 0">
-              <td colspan="6" class="px-6 py-4 text-center text-sm text-gray-500">
-                <div class="flex justify-center">
-                  <svg class="animate-spin h-5 w-5 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                  </svg>
-                  <span class="ml-2">Đang tải đơn hàng...</span>
-                </div>
-              </td>
-            </tr>
           </tbody>
         </table>
       </div>
@@ -178,7 +237,8 @@
                   :class="{
                     'bg-yellow-100 text-yellow-800': selectedOrder.status === 'pending',
                     'bg-blue-100 text-blue-800': selectedOrder.status === 'processing',
-                    'bg-green-100 text-green-800': selectedOrder.status === 'delivered'
+                    'bg-green-100 text-green-800': selectedOrder.status === 'delivered',
+                    'bg-red-100 text-red-800': selectedOrder.status === 'cancelled'
                   }"
                 >
                   {{ translateStatus(selectedOrder.status) }}
@@ -214,7 +274,7 @@
                             :src="item.productId.image" 
                             :alt="item.productId.name"
                             class="h-16 w-16 object-cover rounded-md"
-                            @error="e => e.target.src = '/placeholder-image.jpg'"
+                            @error="handleImageError"
                           >
                         </div>
                         <div class="ml-4">
@@ -247,10 +307,9 @@
           <div class="border-t pt-4">
             <h4 class="font-medium text-gray-700 mb-2">Cập nhật trạng thái</h4>
             <div class="flex items-center space-x-4">
-              <!-- Trong phần Update Status của Order Details Modal -->
               <select 
                 v-model="newStatus" 
-                class="rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                class="rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm"
               >
                 <option value="pending">Chờ xác nhận</option>
                 <option value="processing">Đang xử lý</option>
@@ -299,7 +358,8 @@
                 :class="{
                   'bg-yellow-100 text-yellow-800': selectedOrder.status === 'pending',
                   'bg-blue-100 text-blue-800': selectedOrder.status === 'processing',
-                  'bg-green-100 text-green-800': selectedOrder.status === 'delivered'
+                  'bg-green-100 text-green-800': selectedOrder.status === 'delivered',
+                  'bg-red-100 text-red-800': selectedOrder.status === 'cancelled'
                 }"
               >
                 {{ translateStatus(selectedOrder.status) }}
@@ -348,7 +408,7 @@
 </template>
 
 <script>
-import { ref, computed, onMounted, inject } from 'vue' // Thêm inject
+import { ref, computed, onMounted, inject } from 'vue'
 import { useAuthStore } from '../stores/auth'
 import { useNotificationStore } from '../stores/notification'
 import axios from 'axios'
@@ -357,8 +417,8 @@ import { useToast } from 'vue-toastification'
 export default {
   setup() {
     const authStore = useAuthStore()
-    const notificationStore = useNotificationStore() // Thêm notification store
-    const toast = useToast() // Thêm dòng này để khởi tạo toast
+    const notificationStore = useNotificationStore()
+    const toast = useToast()
     const orders = ref([])
     const isLoading = ref(false)
     const error = ref(null)
@@ -368,7 +428,6 @@ export default {
     const newStatus = ref('')
     const isUpdating = ref(false)
     
-    // Inject hàm cập nhật trạng thái từ component cha
     const updateOrderStatus = inject('updateOrderStatus', null)
     
     // Filters
@@ -377,7 +436,6 @@ export default {
     const searchQuery = ref('')
     
     // Fetch all orders
-    // Trong phần setup()
     const fetchOrders = async () => {
       if (!authStore.isAuthenticated || authStore.user.role !== 'admin') {
         error.value = 'Bạn không có quyền truy cập trang này'
@@ -534,7 +592,7 @@ export default {
         result = result.filter(order => 
           order._id.toLowerCase().includes(query) || 
           order.phone.toLowerCase().includes(query) ||
-          order.userId.username.toLowerCase().includes(query)  // Sửa: truy cập username từ userId object
+          order.userId.username.toLowerCase().includes(query)
         )
       }
       
@@ -570,6 +628,11 @@ export default {
       return statusMap[status] || status
     }
     
+    // Handle image error
+    const handleImageError = (e) => {
+      e.target.src = 'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y'
+    }
+    
     // Load orders when component is mounted
     onMounted(() => {
       fetchOrders()
@@ -590,14 +653,25 @@ export default {
       filteredOrders,
       fetchOrders,
       viewOrderDetails,
-      updateOrderStatus,
       openStatusUpdateModal,
       saveOrderStatus,
       formatDate,
       formatPrice,
       translateStatus,
-      toast
+      toast,
+      handleImageError
     }
   }
 }
 </script>
+
+<style scoped>
+/* Tùy chỉnh giao diện thẻ trên di động */
+.sm:hidden .border {
+  transition: all 0.2s ease-in-out;
+}
+.sm:hidden .border:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+</style>

@@ -78,6 +78,11 @@
             </div>
           </form>
           
+          <!-- Banner Image -->
+          <div class="mt-8 rounded-xl overflow-hidden shadow-lg">
+            <img src="@/assets/banner-product-1.png" alt="Sweet Treats Banner" class="w-full h-auto max-w-full max-h-[400px] object-cover" />
+          </div>
+          
           <!-- Success message -->
           <div v-if="formSubmitted" class="mt-6 p-4 bg-green-50 rounded-md">
             <div class="flex">

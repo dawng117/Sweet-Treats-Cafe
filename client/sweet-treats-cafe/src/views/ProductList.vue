@@ -71,11 +71,11 @@
       </div>
       
       <!-- Carousel View for Products -->
-      <div v-else-if="viewMode === 'carousel'" class="mt-8">
-        <div class="flex justify-between items-center mb-4">
-          <h2 class="text-2xl font-semibold text-pastel-pink">Featured Products</h2>
+      <div v-else-if="viewMode === 'carousel'" class="mt-6 sm:mt-8">
+        <div class="flex flex-col sm:flex-row justify-between items-center mb-3 sm:mb-4 px-2 sm:px-0">
+          <h2 class="text-xl sm:text-2xl font-semibold text-pastel-pink mb-2 sm:mb-0">Featured Products</h2>
           <button @click="toggleViewMode" 
-                  class="bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 hover:shadow-md flex items-center">
+                  class="w-full sm:w-auto bg-gray-200 hover:bg-gray-300 px-3 sm:px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 hover:shadow-md flex items-center justify-center">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
             </svg>
@@ -86,11 +86,12 @@
         <div class="relative overflow-hidden rounded-lg shadow-md">
           <div class="flex transition-transform duration-700 ease-in-out" 
                :style="{ transform: `translateX(-${currentCarouselSlide * 100}%)` }">
-            <div v-for="(group, index) in productGroups" :key="index" class="min-w-full flex space-x-6 p-2">
+            <div v-for="(group, index) in productGroups" :key="index" 
+                 class="min-w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6 p-2 sm:p-3">
               <div v-for="product in group" :key="product._id" 
-                   class="bg-white p-4 rounded-lg shadow-md flex-1 transform transition-all duration-300 hover:scale-105 hover:shadow-lg">
+                   class="bg-white p-3 sm:p-4 rounded-lg shadow-md transform transition-all duration-300 hover:scale-105 hover:shadow-lg">
                 <router-link :to="`/product/${product._id}`" class="block">
-                  <div class="relative overflow-hidden rounded-md group h-56 md:h-72 flex items-center justify-center bg-gray-50">
+                  <div class="relative overflow-hidden rounded-md group h-40 sm:h-48 md:h-56 lg:h-64 flex items-center justify-center bg-gray-50">
                     <img :src="product.image" :alt="product.name" class="max-w-full max-h-full object-contain transition-transform duration-500 group-hover:scale-110" />
                     <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
                       <div class="p-3 text-white">
@@ -108,18 +109,18 @@
                       </span>
                     </div>
                   </div>
-                  <h3 class="text-xl font-semibold mt-3">{{ product.name }}</h3>
-                  <p class="text-gray-700">{{ product.price.toLocaleString() }} VND</p>
-                  <p class="text-sm text-gray-600 my-2 line-clamp-2">{{ product.description }}</p>
+                  <h3 class="text-lg sm:text-xl font-semibold mt-2 sm:mt-3">{{ product.name }}</h3>
+                  <p class="text-gray-700 text-base sm:text-lg">{{ product.price.toLocaleString() }} VND</p>
+                  <p class="text-sm text-gray-600 my-1 sm:my-2 line-clamp-2">{{ product.description }}</p>
                 </router-link>
                 <!-- Thay đổi nút trong carousel view -->
                 <button
                   @click="addToCart(product)"
-                  class="bg-pastel-pink text-white px-4 py-2 mt-2 rounded-md w-full hover:bg-pink-400 transition-colors flex items-center justify-center group"
+                  class="bg-pastel-pink text-white px-3 sm:px-4 py-2 mt-2 rounded-md w-full hover:bg-pink-400 transition-colors flex items-center justify-center group text-sm sm:text-base"
                   :disabled="!product.inStock"
                   :class="{'opacity-50 cursor-not-allowed': !product.inStock}"
                 >
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 transform group-hover:scale-110 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 sm:h-5 w-4 sm:w-5 mr-1 sm:mr-2 transform group-hover:scale-110 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
                   </svg>
                   {{ product.inStock ? 'Thêm vào giỏ' : 'Hết hàng' }}
@@ -130,14 +131,14 @@
           
           <!-- Navigation arrows -->
           <button v-if="productGroups.length > 1" @click="prevCarouselSlide" 
-                  class="absolute left-0 top-1/2 -translate-y-1/2 bg-white/70 hover:bg-white/90 rounded-full p-2 shadow-md z-10 -ml-2 transition-transform duration-300 hover:scale-110">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-gray-700">
+                  class="absolute left-1 sm:left-2 top-1/2 -translate-y-1/2 bg-white/70 hover:bg-white/90 rounded-full p-1.5 sm:p-2 shadow-md z-10 transition-transform duration-300 hover:scale-110">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 sm:w-6 sm:h-6 text-gray-700">
               <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
             </svg>
           </button>
           <button v-if="productGroups.length > 1" @click="nextCarouselSlide" 
-                  class="absolute right-0 top-1/2 -translate-y-1/2 bg-white/70 hover:bg-white/90 rounded-full p-2 shadow-md z-10 -mr-2 transition-transform duration-300 hover:scale-110">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-gray-700">
+                  class="absolute right-1 sm:right-2 top-1/2 -translate-y-1/2 bg-white/70 hover:bg-white/90 rounded-full p-1.5 sm:p-2 shadow-md z-10 transition-transform duration-300 hover:scale-110">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 sm:w-6 sm:h-6 text-gray-700">
               <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
             </svg>
           </button>
