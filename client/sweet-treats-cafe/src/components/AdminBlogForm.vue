@@ -62,7 +62,7 @@
         <div class="flex justify-end space-x-4">
           <button
             type="button"
-            @click="router.push('/admin/blogs')"
+            @click="handleCancel"
             class="px-4 py-2 border rounded-md hover:bg-gray-100"
           >
             Hủy
@@ -132,9 +132,15 @@ async function handleSubmit() {
       await blogStore.createBlog(blogData)
     }
 
-    router.push('/admin/blogs')
+    router.push('/admin?tab=blogs')
+    
   } catch (error) {
     // Xử lý lỗi
   }
+}
+
+// Sửa lại hàm xử lý nút Hủy
+const handleCancel = () => {
+  router.push('/admin?tab=blogs')
 }
 </script>

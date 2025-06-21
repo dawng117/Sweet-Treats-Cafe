@@ -45,18 +45,19 @@
     
     <!-- Enhanced Product Carousel -->
     <div class="relative overflow-hidden mb-8">
-      <h2 class="text-2xl font-semibold text-pastel-pink mb-4">Featured Products</h2>
+      <h2 class="text-2xl md:text-3xl font-semibold text-pastel-pink mb-4">Featured Products</h2>
       
       <!-- Carousel container -->
       <div class="relative">
         <div class="flex transition-transform duration-700 ease-in-out" 
              :style="{ transform: `translateX(-${currentProductSlide * 100}%)` }">
-          <div v-for="(group, groupIndex) in productGroups" :key="groupIndex" class="min-w-full flex space-x-6">
+          <div v-for="(group, groupIndex) in productGroups" :key="groupIndex" 
+               class="min-w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             <!-- Cập nhật phần Featured Products để thêm liên kết đến trang chi tiết -->
             <div v-for="product in group" :key="product.id" 
-                 class="bg-white p-4 rounded-lg shadow-md flex-1 transform transition-all duration-300 hover:scale-105 hover:shadow-lg">
+                 class="bg-white p-3 sm:p-4 rounded-lg shadow-md transform transition-all duration-300 hover:scale-105 hover:shadow-lg">
                 <router-link :to="`/product/${product._id}`" class="block">
-                <div class="relative overflow-hidden rounded-md group h-56 flex items-center justify-center bg-gray-50">
+                <div class="relative overflow-hidden rounded-md group h-40 sm:h-48 md:h-56 flex items-center justify-center bg-gray-50">
                 <img :src="product.image" :alt="product.name" class="max-w-full max-h-full object-contain transition-transform duration-500 group-hover:scale-110" />
                 <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
                 <div class="p-3 text-white">
@@ -74,7 +75,7 @@
                 </span>
                 </div>
                 </div>
-                <h2 class="text-xl font-semibold mt-3">{{ product.name }}</h2>
+                <h2 class="text-lg sm:text-xl font-semibold mt-2 sm:mt-3">{{ product.name }}</h2>
                 <p class="text-gray-700">{{ product.price.toLocaleString() }} VND</p>
                 <p class="text-sm text-gray-600 my-2 line-clamp-2">{{ product.description }}</p>
                 </router-link>

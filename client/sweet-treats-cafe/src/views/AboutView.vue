@@ -29,17 +29,23 @@
             <span class="absolute -bottom-2 left-0 w-full h-1 bg-gradient-to-r from-pink-400 to-indigo-500"></span>
           </span>
         </h2>
-        <div class="bg-white rounded-xl shadow-lg p-8 hover:shadow-xl transition-shadow duration-300">
-          <div class="max-w-3xl mx-auto">
-            <p class="text-gray-600 mb-4">
-              Sweet Treats Cafe được thành lập vào năm 2020 bởi những người đam mê ẩm thực ngọt ngào. Chúng tôi bắt đầu như một tiệm bánh nhỏ, nhưng với tình yêu và sự ủng hộ từ khách hàng, chúng tôi đã phát triển thành một điểm đến yêu thích cho những ai yêu thích bánh ngọt và đồ uống thơm ngon.
-            </p>
-            <p class="text-gray-600 mb-4">
-              Triết lý của chúng tôi rất đơn giản: sử dụng nguyên liệu tươi ngon nhất, làm mọi thứ từ đầu, và luôn đặt khách hàng lên hàng đầu. Chúng tôi tin rằng mỗi chiếc bánh, mỗi ly cà phê đều là mội cơ hội để tạo ra niềm vui và kỷ niệm đáng nhớ.
-            </p>
-            <p class="text-gray-600">
-              Hôm nay, Sweet Treats Cafe tự hào phục vụ hàng trăm khách hàng mỗi ngày, mang đến không chỉ những món ăn ngon mà còn là không gian ấm cúng để mọi người có thể gặp gỡ, trò chuyện và tận hưởng những khoảnh khắc ngọt ngào của cuộc sống.
-            </p>
+        <div class="bg-pastel-pink rounded-xl shadow-lg overflow-hidden flex flex-col md:flex-row items-center justify-center gap-4 p-4">
+          <!-- Hình ảnh -->
+          <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+            <img src="@/assets/banner-product-2.png" alt="Sweet Treats Story" class="w-auto h-auto max-w-full max-h-[400px] object-contain" />
+          </div>
+          <div class="bg-white rounded-xl shadow-lg p-8 hover:shadow-xl transition-shadow duration-300">
+            <div class="max-w-3xl mx-auto">
+              <p class="text-gray-600 mb-4">
+                Sweet Treats Cafe được thành lập vào năm 2020 bởi những người đam mê ẩm thực ngọt ngào. Chúng tôi bắt đầu như một tiệm bánh nhỏ, nhưng với tình yêu và sự ủng hộ từ khách hàng, chúng tôi đã phát triển thành một điểm đến yêu thích cho những ai yêu thích bánh ngọt và đồ uống thơm ngon.
+              </p>
+              <p class="text-gray-600 mb-4">
+                Triết lý của chúng tôi rất đơn giản: sử dụng nguyên liệu tươi ngon nhất, làm mọi thứ từ đầu, và luôn đặt khách hàng lên hàng đầu. Chúng tôi tin rằng mỗi chiếc bánh, mỗi ly cà phê đều là mội cơ hội để tạo ra niềm vui và kỷ niệm đáng nhớ.
+              </p>
+              <p class="text-gray-600">
+                Hôm nay, Sweet Treats Cafe tự hào phục vụ hàng trăm khách hàng mỗi ngày, mang đến không chỉ những món ăn ngon mà còn là không gian ấm cúng để mọi người có thể gặp gỡ, trò chuyện và tận hưởng những khoảnh khắc ngọt ngào của cuộc sống.
+              </p>
+            </div>
           </div>
         </div>
       </div>
